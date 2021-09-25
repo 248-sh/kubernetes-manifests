@@ -1,0 +1,9 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: certificate
+spec:
+  issuerRef:
+    kind: ClusterIssuer
+    name: issuer-letsencrypt
+  secretName: certificate-secret

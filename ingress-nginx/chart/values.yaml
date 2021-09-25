@@ -1,0 +1,14 @@
+ingress-nginx:
+  admissionWebhooks:
+    timeoutSeconds: 29
+  controller:
+    config:
+      use-proxy-protocol: "true"
+    extraArgs:
+      default-ssl-certificate: "default/certificate-secret"
+    ingressClassResource:
+      default: true
+      enabled: true
+    service:
+      type: LoadBalancer
+      externalTrafficPolicy: Local

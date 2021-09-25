@@ -1,0 +1,14 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cluster-issuer
+  namespace: cert-manager
+spec:
+  acme:
+    email: ca@248.sh
+    solvers:
+      - dns01:
+          digitalocean:
+            tokenSecretRef:
+              name: from-terraform
+              key: digitalocean-token
