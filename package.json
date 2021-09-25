@@ -1,6 +1,6 @@
 {
   "name": "kubernetes-manifests",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "repository": "git@github.com:248-sh/kubernetes-manifests.git",
   "author": "miran248 <miran@248.sh>",
