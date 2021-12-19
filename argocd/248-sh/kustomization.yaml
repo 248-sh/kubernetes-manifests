@@ -1,8 +1,15 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: argocd
 resources:
   - ../base
+  - app-id.yaml
+  - argocd-server-ingress.yaml
   - cert-manager.yaml
   - external-dns.yaml
   - ingress-nginx.yaml
-  - kube-prometheus.yaml
+  # - kube-prometheus.yaml
+  # - pomerium.yaml
+patchesStrategicMerge:
+  - patch-argocd-cm.yaml
+  - patch-argocd-cmd-params-cm.yaml

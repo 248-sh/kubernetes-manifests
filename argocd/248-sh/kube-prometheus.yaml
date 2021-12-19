@@ -14,3 +14,7 @@ spec:
     path: kube-prometheus/248-sh
     repoURL: https://github.com/248-sh/kubernetes-manifests
     targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      # selfHeal: true

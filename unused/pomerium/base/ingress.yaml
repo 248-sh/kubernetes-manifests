@@ -1,0 +1,41 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pomerium
+  namespace: pomerium
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-issuer
+    # ingress.pomerium.io/policy: |
+    #   - allow:
+    #       and:
+    #         - email:
+    #             is: miran@248.sh
+    kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+spec:
+  rules:
+    - host: authenticate.248.sh
+      http:
+        paths:
+          - backend:
+              service:
+                name: pomerium-authenticate
+                port:
+                  name: http
+            pathType: ImplementationSpecific
+    - host: forwardauth.248.sh
+      http:
+        paths:
+          - backend:
+              service:
+                name: pomerium-proxy
+                port:
+                  name: http
+            pathType: ImplementationSpecific
+  # tls:
+  #   - hosts:
+  #       - authenticate.248.sh
+  #       - forwardauth.248.sh
+  #     secretName: pomerium-secret

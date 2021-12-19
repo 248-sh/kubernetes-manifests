@@ -1,0 +1,46 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kube-prometheus
+  namespace: monitoring
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-issuer
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/auth-signin: "https://id.248.sh/api/authenticate?uri=$scheme://$host$request_uri"
+    nginx.ingress.kubernetes.io/auth-url: "https://id.248.sh/api/authorize?uri=$scheme://$host$request_uri"
+spec:
+  rules:
+    - host: alerts.248.sh
+      http:
+        paths:
+          - backend:
+              service:
+                name: alertmanager-main
+                port:
+                  name: web
+            pathType: ImplementationSpecific
+    - host: grafana.248.sh
+      http:
+        paths:
+          - backend:
+              service:
+                name: grafana
+                port:
+                  name: http
+            pathType: ImplementationSpecific
+    - host: prometheus.248.sh
+      http:
+        paths:
+          - backend:
+              service:
+                name: prometheus-k8s
+                port:
+                  name: web
+            pathType: ImplementationSpecific
+  # tls:
+  #   - hosts:
+  #       - alerts.248.sh
+  #       - grafana.248.sh
+  #       - prometheus.248.sh
+  #     secretName: kube-prometheus-secret

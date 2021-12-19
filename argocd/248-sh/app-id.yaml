@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: ingress-nginx
+  name: app-id
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -11,8 +11,8 @@ spec:
     server: "https://kubernetes.default.svc"
   project: default
   source:
-    path: ingress-nginx/248-sh
-    repoURL: https://github.com/248-sh/kubernetes-manifests
+    path: kustomize
+    repoURL: https://github.com/248-sh/app-id
     targetRevision: HEAD
   syncPolicy:
     automated:

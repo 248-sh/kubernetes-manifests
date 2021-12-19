@@ -1,0 +1,18 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pomerium-ca
+spec:
+  commonName: pomerium-ca
+  # dnsNames:
+  #   - "248.sh"
+  #   - "*.248.sh"
+  isCA: true
+  issuerRef:
+    kind: ClusterIssuer
+    name: selfsigned-cluster-issuer
+    # name: cluster-issuer
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  secretName: pomerium-issuer-private-key

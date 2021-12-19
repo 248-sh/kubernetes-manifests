@@ -1,6 +1,9 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: cert-manager
 resources:
-  - https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.yaml
-  - cluster-issuer.yaml
+  - https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.crds.yaml
+  # - https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
+  - generated.yaml
+  - cluster-issuers.yaml
   - certificate.yaml

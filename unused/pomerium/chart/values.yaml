@@ -1,0 +1,67 @@
+pomerium:
+  authenticate:
+    existingTLSSecret: internal-pomerium-secret
+    idp:
+      clientID: lalala
+      clientSecret: lalala
+      provider: github
+      serviceAccount: lalala
+    # ingress:
+    #   annotations:
+    #     cert-manager.io/cluster-issuer: cluster-issuer
+    #   tls:
+    #     secretName: pomerium-secret
+    # proxied: false
+  authorize:
+    existingTLSSecret: internal-pomerium-secret
+  cache:
+    existingTLSSecret: internal-pomerium-secret
+  # autocert: true
+  config:
+    insecure: true
+    existingCASecret: internal-pomerium-secret
+    generateTLS: false
+    rootDomain: 248.sh
+    # routes:
+    #   - allowed_groups: ["cluster-access"]
+    #     from: "*"
+    #     to: "*"
+  databroker:
+    existingTLSSecret: internal-pomerium-secret
+    storage:
+      clientTLS:
+        existingCASecretKey: ca.crt
+        existingSecretName: internal-pomerium-secret
+      connectionString: rediss://pomerium-redis-master.pomerium.svc.cluster.local
+      type: redis
+  forwardAuth:
+    enabled: true
+    internal: true
+  ingress:
+    enabled: false
+    secretName: internal-pomerium-secret
+  # ingressController:
+  #   enabled: true
+  #   ingressClassResource:
+  #     default: true
+  #     enabled: true
+  metrics:
+    enabled: true
+  operator:
+    enabled: true
+  proxy:
+    existingTLSSecret: internal-pomerium-secret
+  redis:
+    auth:
+      enabled: false
+    enabled: true
+    generateTLS: false
+    tls:
+      certificateSecret: internal-pomerium-redis-secret
+    usePassword: false
+  resources:
+    requests:
+      cpu: "0.01"
+      memory: "16Mi"
+  serviceMonitor:
+    enabled: true

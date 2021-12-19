@@ -1,0 +1,34 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pomerium-certificate
+spec:
+  secretName: internal-pomerium-secret
+  issuerRef:
+    name: pomerium-issuer
+    kind: Issuer
+  usages:
+    - server auth
+    - client auth
+  dnsNames:
+    - pomerium-proxy.pomerium.svc.cluster.local
+    - pomerium-authorize.pomerium.svc.cluster.local
+    - pomerium-databroker.pomerium.svc.cluster.local
+    - pomerium-authenticate.pomerium.svc.cluster.local
+    # - authenticate.248.sh
+    # TODO - If you're not using the Pomerium Ingress controller, you may want a wildcard entry as well.
+    # - "*.248.sh" # Quotes are required to escape the wildcard
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pomerium-redis-certificate
+spec:
+  secretName: internal-pomerium-redis-secret
+  issuerRef:
+    name: pomerium-issuer
+    kind: Issuer
+  dnsNames:
+    - pomerium-redis-master.pomerium.svc.cluster.local
+    - pomerium-redis-headless.pomerium.svc.cluster.local
+    - pomerium-redis-replicas.pomerium.svc.cluster.local

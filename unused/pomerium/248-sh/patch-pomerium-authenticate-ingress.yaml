@@ -1,0 +1,9 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: pomerium-authenticate
+spec:
+  tls:
+    - hosts:
+        - "*.248.sh"
+      secretName: pomerium-secret
