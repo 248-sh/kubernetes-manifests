@@ -3683,6 +3683,66 @@ spec:
     automated:
       prune: true
 ---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  name: cert-manager
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: cert-manager/248-sh
+    repoURL: https://github.com/248-sh/kubernetes-manifests
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  name: external-dns
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: external-dns/248-sh
+    repoURL: https://github.com/248-sh/kubernetes-manifests
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+  name: ingress-nginx
+  namespace: argocd
+spec:
+  destination:
+    namespace: default
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: ingress-nginx/248-sh
+    repoURL: https://github.com/248-sh/kubernetes-manifests
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:

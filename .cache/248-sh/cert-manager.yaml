@@ -30862,55 +30862,6 @@ metadata:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  labels:
-    app: cainjector
-    app.kubernetes.io/component: cainjector
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: cainjector
-    app.kubernetes.io/version: v1.6.1
-    helm.sh/chart: cert-manager-v1.6.1
-  name: cert-manager-cainjector:leaderelection
-  namespace: cert-manager
-rules:
-- apiGroups:
-  - ""
-  resourceNames:
-  - cert-manager-cainjector-leader-election
-  - cert-manager-cainjector-leader-election-core
-  resources:
-  - configmaps
-  verbs:
-  - get
-  - update
-  - patch
-- apiGroups:
-  - ""
-  resources:
-  - configmaps
-  verbs:
-  - create
-- apiGroups:
-  - coordination.k8s.io
-  resourceNames:
-  - cert-manager-cainjector-leader-election
-  - cert-manager-cainjector-leader-election-core
-  resources:
-  - leases
-  verbs:
-  - get
-  - update
-  - patch
-- apiGroups:
-  - coordination.k8s.io
-  resources:
-  - leases
-  verbs:
-  - create
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: Role
-metadata:
   annotations:
     helm.sh/hook: post-install
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
@@ -30969,6 +30920,55 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   labels:
+    app: cainjector
+    app.kubernetes.io/component: cainjector
+    app.kubernetes.io/instance: cert-manager
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: cainjector
+    app.kubernetes.io/version: v1.6.1
+    helm.sh/chart: cert-manager-v1.6.1
+  name: cert-manager-cainjector:leaderelection
+  namespace: kube-system
+rules:
+- apiGroups:
+  - ""
+  resourceNames:
+  - cert-manager-cainjector-leader-election
+  - cert-manager-cainjector-leader-election-core
+  resources:
+  - configmaps
+  verbs:
+  - get
+  - update
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - configmaps
+  verbs:
+  - create
+- apiGroups:
+  - coordination.k8s.io
+  resourceNames:
+  - cert-manager-cainjector-leader-election
+  - cert-manager-cainjector-leader-election-core
+  resources:
+  - leases
+  verbs:
+  - get
+  - update
+  - patch
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  labels:
     app: cert-manager
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: cert-manager
@@ -30977,7 +30977,7 @@ metadata:
     app.kubernetes.io/version: v1.6.1
     helm.sh/chart: cert-manager-v1.6.1
   name: cert-manager:leaderelection
-  namespace: cert-manager
+  namespace: kube-system
 rules:
 - apiGroups:
   - ""
@@ -31660,28 +31660,6 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  labels:
-    app: cainjector
-    app.kubernetes.io/component: cainjector
-    app.kubernetes.io/instance: cert-manager
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: cainjector
-    app.kubernetes.io/version: v1.6.1
-    helm.sh/chart: cert-manager-v1.6.1
-  name: cert-manager-cainjector:leaderelection
-  namespace: cert-manager
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: cert-manager-cainjector:leaderelection
-subjects:
-- kind: ServiceAccount
-  name: cert-manager-cainjector
-  namespace: cert-manager
----
-apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
-metadata:
   annotations:
     helm.sh/hook: post-install
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
@@ -31732,6 +31710,28 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   labels:
+    app: cainjector
+    app.kubernetes.io/component: cainjector
+    app.kubernetes.io/instance: cert-manager
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: cainjector
+    app.kubernetes.io/version: v1.6.1
+    helm.sh/chart: cert-manager-v1.6.1
+  name: cert-manager-cainjector:leaderelection
+  namespace: kube-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: cert-manager-cainjector:leaderelection
+subjects:
+- kind: ServiceAccount
+  name: cert-manager-cainjector
+  namespace: cert-manager
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  labels:
     app: cert-manager
     app.kubernetes.io/component: controller
     app.kubernetes.io/instance: cert-manager
@@ -31740,7 +31740,7 @@ metadata:
     app.kubernetes.io/version: v1.6.1
     helm.sh/chart: cert-manager-v1.6.1
   name: cert-manager:leaderelection
-  namespace: cert-manager
+  namespace: kube-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
