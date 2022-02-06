@@ -1,0 +1,24 @@
+apiVersion: monitoring.grafana.com/v1alpha1
+kind: LogsInstance
+metadata:
+  name: grafana-agent-logs
+  namespace: monitoring
+  labels:
+    agent: grafana-agent-logs
+spec:
+  clients:
+  - url: https://logs-prod-eu-west-0.grafana.net/api/prom/push
+    basicAuth:
+      username:
+        name: from-terraform
+        key: loki-username
+      password:
+        name: from-terraform
+        key: loki-password
+
+  # Supply an empty namespace selector to look in all namespaces. Remove
+  # this to only look in the same namespace as the LogsInstance CR
+  podLogsNamespaceSelector: {}
+  podLogsSelector:
+    matchLabels:
+      instance: shared

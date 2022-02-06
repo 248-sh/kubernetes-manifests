@@ -1,0 +1,53 @@
+apiVersion: crdb.cockroachlabs.com/v1alpha1
+kind: CrdbCluster
+metadata:
+  name: signals
+  namespace: cockroach
+spec:
+  image:
+    name: cockroachdb/cockroach:v21.2.3
+  # additionalArgs:
+  #   - "--insecure"
+  dataStore:
+    pvc:
+      # source:
+      #   claimName: cockroach-pvc
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 4Gi
+        # selector:
+        #   matchLabels:
+        #     app.kubernetes.io/component: storage
+        #     app.kubernetes.io/part-of: signals
+        storageClassName: retained-storage
+        volumeMode: Filesystem
+    # supportsAutoResize: true
+  tlsEnabled: true
+  # tlsEnabled: false
+  nodes: 3
+  nodeSelector:
+    env: dev
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  #   limits:
+  #     cpu: 2
+  #     memory: 8Gi
+  # ingress:
+  #   ui:
+  #     annotations:
+  #       cert-manager.io/cluster-issuer: cluster-issuer
+  #       kubernetes.io/ingress.class: nginx
+  #       kubernetes.io/tls-acme: "true"
+  #       nginx.ingress.kubernetes.io/auth-signin: "https://id.248.sh/api/authenticate?uri=$scheme://$host$request_uri"
+  #       nginx.ingress.kubernetes.io/auth-url: "https://id.248.sh/api/authorize?uri=$scheme://$host$request_uri"
+  #       # nginx.ingress.kubernetes.io/auth-signin: "http://app-id.app-id.svc.cluster.local/api/authenticate?uri=$scheme://$host$request_uri"
+  #       # nginx.ingress.kubernetes.io/auth-url: "http://app-id.app-id.svc.cluster.local/api/authorize?uri=$scheme://$host$request_uri"
+  #       # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+  #       # nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+  #     host: cockroach.248.sh
+  #     ingressClassName: nginx

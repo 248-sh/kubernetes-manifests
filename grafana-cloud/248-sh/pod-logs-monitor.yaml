@@ -1,0 +1,23 @@
+apiVersion: monitoring.grafana.com/v1alpha1
+kind: PodLogs
+metadata:
+  labels:
+    instance: shared
+  name: kubernetes-pods
+  namespace: monitoring
+spec:
+  pipelineStages:
+    - docker: {}
+  namespaceSelector:
+    matchNames:
+    - app-id
+    - app-signals
+    - argocd
+    - cert-manager
+    - cockroach
+    - default
+    - external-dns
+    - ingress-nginx
+    - monitoring
+  selector:
+    matchLabels: {}

@@ -2,12 +2,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: argocd
 resources:
-  # - https://raw.githubusercontent.com/argoproj/argo-cd/v2.1.2/manifests/install.yaml
-  - github.com/argoproj/argo-cd/manifests/crds?ref=v2.2.1
-  - github.com/argoproj/argo-cd/manifests/cluster-rbac?ref=v2.2.1
-  - github.com/argoproj/argo-cd/manifests/base/config?ref=v2.2.1
-  - github.com/argoproj/argo-cd/manifests/base/application-controller?ref=v2.2.1
-  - github.com/argoproj/argo-cd/manifests/base/repo-server?ref=v2.2.1
-  - github.com/argoproj/argo-cd/manifests/base/server?ref=v2.2.1
-  - github.com/argoproj/argo-cd/manifests/base/redis?ref=v2.2.1
-  # - github.com/argoproj/argo-cd/manifests/base/notification?ref=v2.2.1
+  - upstream/argoproj/argo-cd/manifests/crds
+  - upstream/argoproj/argo-cd/manifests/cluster-rbac
+  - upstream/argoproj/argo-cd/manifests/base/config
+  - upstream/argoproj/argo-cd/manifests/base/application-controller
+  - upstream/argoproj/argo-cd/manifests/base/repo-server
+  - upstream/argoproj/argo-cd/manifests/base/server
+  - upstream/argoproj/argo-cd/manifests/base/redis
+  # - upstream/argoproj/argo-cd/manifests/base/notification

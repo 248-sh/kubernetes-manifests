@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cockroach
+  namespace: cockroach
+  annotations:
+    cert-manager.io/cluster-issuer: cluster-issuer
+    kubernetes.io/ingress.class: nginx
+    kubernetes.io/tls-acme: "true"
+    nginx.ingress.kubernetes.io/auth-signin: "https://id.248.sh/api/authenticate?uri=$scheme://$host$request_uri"
+    nginx.ingress.kubernetes.io/auth-url: "https://id.248.sh/api/authorize?uri=$scheme://$host$request_uri"
+    # nginx.ingress.kubernetes.io/auth-signin: "http://app-id.app-id.svc.cluster.local/api/authenticate?uri=$scheme://$host$request_uri"
+    # nginx.ingress.kubernetes.io/auth-url: "http://app-id.app-id.svc.cluster.local/api/authorize?uri=$scheme://$host$request_uri"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+spec:
+  rules:
+    - host: cockroach.248.sh
+      http:
+        paths:
+          - backend:
+              service:
+                name: signals-public
+                port:
+                  name: http
+            path: /
+            pathType: Prefix
+  # tls:
+  #   - hosts:
+  #       - cockroach.248.sh
+  #     secretName: cockroach-secret # do not change, this is provided by Argo CD

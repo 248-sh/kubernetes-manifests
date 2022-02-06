@@ -3,7 +3,6 @@ kind: Kustomization
 # namespace: cert-manager
 resources:
   - https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.crds.yaml
-  # - https://github.com/jetstack/cert-manager/releases/download/v1.6.1/cert-manager.yaml
-  - generated.yaml
+  - helm-cert-manager.yaml
   - cluster-issuers.yaml
   - certificate.yaml

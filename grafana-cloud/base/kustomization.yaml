@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: monitoring
+resources:
+  - upstream/grafana/agent/production/operator/crds/monitoring.coreos.com_podmonitors.yaml
+  - upstream/grafana/agent/production/operator/crds/monitoring.coreos.com_probes.yaml
+  - upstream/grafana/agent/production/operator/crds/monitoring.coreos.com_servicemonitors.yaml
+  - upstream/grafana/agent/production/operator/crds/monitoring.grafana.com_grafanaagents.yaml
+  - upstream/grafana/agent/production/operator/crds/monitoring.grafana.com_logsinstances.yaml
+  - upstream/grafana/agent/production/operator/crds/monitoring.grafana.com_metricsinstances.yaml
+  - upstream/grafana/agent/production/operator/crds/monitoring.grafana.com_podlogs.yaml
+  - helm-grafana-agent-operator.yaml
+  - github.com/kubernetes/kube-state-metrics?ref=v2.3.0
+  - grafana-agent.yaml

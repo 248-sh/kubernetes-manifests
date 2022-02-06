@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cockroach
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    namespace: cockroach
+    server: "https://kubernetes.default.svc"
+  project: default
+  source:
+    path: kustomize
+    repoURL: https://github.com/248-sh/cockroach
+    targetRevision: HEAD
+  syncPolicy:
+    automated:
+      prune: true
+      # selfHeal: true
