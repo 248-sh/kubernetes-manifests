@@ -3666,8 +3666,6 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
   name: app-id
   namespace: argocd
 spec:
@@ -3686,8 +3684,6 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
   name: cert-manager
   namespace: argocd
 spec:
@@ -3706,8 +3702,6 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
   name: external-dns
   namespace: argocd
 spec:
@@ -3726,8 +3720,6 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  finalizers:
-  - resources-finalizer.argocd.argoproj.io
   name: ingress-nginx
   namespace: argocd
 spec:

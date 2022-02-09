@@ -4,8 +4,8 @@ bootstrap: up-argocd
 tag:
   yarn standard-version
 
-sync: sync-argocd sync-cert-manager sync-cockroach sync-external-dns sync-grafana-cloud sync-ingress-nginx
-build: build-argocd build-cert-manager build-cockroach build-external-dns build-grafana-cloud build-ingress-nginx
+sync: sync-argocd sync-cert-manager sync-cockroach sync-external-dns sync-grafana-cloud sync-ingress-nginx sync-rabbitmq
+build: build-argocd build-cert-manager build-cockroach build-external-dns build-grafana-cloud build-ingress-nginx build-rabbitmq
 
 # argocd
 sync-argocd:
@@ -90,6 +90,17 @@ up-ingress-nginx: build-ingress-nginx
   kubectl apply -f .cache/248-sh/ingress-nginx.yaml
 down-ingress-nginx:
   kubectl delete -f .cache/248-sh/ingress-nginx.yaml
+
+# rabbitmq
+sync-rabbitmq:
+  #!/usr/bin/env bash
+  just clone "/config" v1.11.1 https://github.com/rabbitmq/cluster-operator.git rabbitmq/base/upstream/rabbitmq/cluster-operator
+build-rabbitmq:
+  kustomize build rabbitmq/248-sh > .cache/248-sh/rabbitmq.yaml
+up-rabbitmq: build-rabbitmq
+  kubectl apply -f .cache/248-sh/rabbitmq.yaml
+down-rabbitmq:
+  kubectl delete -f .cache/248-sh/rabbitmq.yaml
 
 clone FILES TAG REPOSITORY FOLDER:
   #!/usr/bin/env bash

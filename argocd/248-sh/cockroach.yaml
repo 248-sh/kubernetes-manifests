@@ -3,16 +3,14 @@ kind: Application
 metadata:
   name: cockroach
   namespace: argocd
-  finalizers:
-    - resources-finalizer.argocd.argoproj.io
 spec:
   destination:
     namespace: cockroach
     server: "https://kubernetes.default.svc"
   project: default
   source:
-    path: kustomize
-    repoURL: https://github.com/248-sh/cockroach
+    path: cockroach/248-sh
+    repoURL: https://github.com/248-sh/kubernetes-manifests
     targetRevision: HEAD
   syncPolicy:
     automated:

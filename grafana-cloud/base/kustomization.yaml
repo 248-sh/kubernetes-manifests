@@ -10,5 +10,5 @@ resources:
   - upstream/grafana/agent/production/operator/crds/monitoring.grafana.com_metricsinstances.yaml
   - upstream/grafana/agent/production/operator/crds/monitoring.grafana.com_podlogs.yaml
   - helm-grafana-agent-operator.yaml
-  - github.com/kubernetes/kube-state-metrics?ref=v2.3.0
+  # - github.com/kubernetes/kube-state-metrics?ref=v2.3.0
   - grafana-agent.yaml
