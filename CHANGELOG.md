@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.1.0 (2022-02-09)
+
+
+### Features
+
+* add grafana agent, .. ([df7bc50](https://github.com/248-sh/kubernetes-manifests/commit/df7bc50d5f41f499fa8e881bd9ebcf082ad04143))
+* add rabbitmq ([ae63e25](https://github.com/248-sh/kubernetes-manifests/commit/ae63e2503eef3dfd724c04ab9f00646b9b8e2dc9))
+
+
+### Bug Fixes
+
+* argocd namespace ([2366e25](https://github.com/248-sh/kubernetes-manifests/commit/2366e2560e383c5e3a753d9002f6c5fb4621f91b))
+* don't set namespace for cert-manager ([093cdd3](https://github.com/248-sh/kubernetes-manifests/commit/093cdd34d34b3890a7f8b2d3af4b747074f57804))
+
 ### [1.0.3](https://github.com/248-sh/kubernetes-manifests/compare/v1.0.2...v1.0.3) (2021-12-19)
 
 
