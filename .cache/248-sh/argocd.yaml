@@ -2810,6 +2810,7 @@ subjects:
 apiVersion: v1
 data:
   admin.enabled: "false"
+  application.instanceLabelKey: argocd.argoproj.io/instance
   users.anonymous.enabled: "true"
 kind: ConfigMap
 metadata:
