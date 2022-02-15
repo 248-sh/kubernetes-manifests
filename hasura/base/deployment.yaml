@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hasura
+spec:
+  replicas: 1
+  template:
+    spec:
+      serviceAccountName: hasura
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchLabels:
+                    app.kubernetes.io/name: hasura
+                topologyKey: kubernetes.io/hostname
+              weight: 1
+      containers:
+        - image: hasuraci/graphql-engine-pro:v2.2.0-pro.1
+          imagePullPolicy: IfNotPresent
+          name: hasura
+          envFrom:
+            - secretRef:
+                name: hasura
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            limits:
+              cpu: 200m
+              memory: 900Mi
+            requests:
+              cpu: 200m
+              memory: 900Mi

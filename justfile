@@ -4,7 +4,7 @@ bootstrap: up-argocd
 tag:
   yarn standard-version
 
-sync: sync-argocd sync-cert-manager sync-cockroach sync-external-dns sync-grafana-cloud sync-ingress-nginx sync-rabbitmq
+sync: sync-argocd sync-aws-node sync-cert-manager sync-cockroach sync-external-dns sync-grafana-cloud sync-ingress-nginx sync-rabbitmq
 build: build-argocd build-cert-manager build-cockroach build-external-dns build-grafana-cloud build-ingress-nginx build-rabbitmq
 
 # argocd
@@ -17,6 +17,11 @@ up-argocd: build-argocd
   kubectl apply -f .cache/248-sh/argocd.yaml
 down-argocd:
   kubectl delete -f .cache/248-sh/argocd.yaml
+
+#  aws-vpc-cni
+sync-aws-node:
+  #!/usr/bin/env bash
+  just clone "/config/master" v1.10.2 https://github.com/aws/amazon-vpc-cni-k8s.git aws-node/base/upstream/aws/amazon-vpc-cni-k8s
 
 # cert-manager
 sync-cert-manager:
@@ -110,9 +115,11 @@ clone FILES TAG REPOSITORY FOLDER:
   echo "SYNCING {{ REPOSITORY }}@{{ TAG }}"
   tput sgr0
 
-  git clone --depth 1 --filter=blob:none --no-checkout --sparse {{ REPOSITORY }} {{ FOLDER }} 2> /dev/null || true
-  cd {{ FOLDER }}
+  rm -Rf {{ FOLDER }} 2> /dev/null
+
+  git clone --depth 1 --filter=blob:none --no-checkout --branch {{ TAG }} {{ REPOSITORY }} {{ FOLDER }}
+  pushd {{ FOLDER }} 1> /dev/null
   git sparse-checkout set {{ FILES }}
-  git fetch origin tag {{ TAG }} --no-tags
-  git checkout {{ TAG }}
-  # git switch --force-create main {{ TAG }}
+  git read-tree -mu HEAD
+  rm -Rf .git
+  popd 1> /dev/null

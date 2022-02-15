@@ -3,5 +3,5 @@ kind: Kustomization
 namespace: ingress-nginx
 resources:
   - ../base
-patchesStrategicMerge:
-  - patch-controller-service.yaml
+# patchesStrategicMerge:
+#   - patch-controller-service.yaml
