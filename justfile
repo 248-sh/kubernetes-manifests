@@ -28,6 +28,17 @@ sync-cert-manager:
   #!/usr/bin/env bash
   helm repo add jetstack https://charts.jetstack.io
   helm template cert-manager jetstack/cert-manager --namespace cert-manager --include-crds --version 1.6.1 -f - <<EOF > cert-manager/base/helm-cert-manager.yaml
+  nodeSelector:
+    env: shared
+  webhook:
+    nodeSelector:
+      env: shared
+  cainjector:
+    nodeSelector:
+      env: shared
+  startupapicheck:
+    nodeSelector:
+      env: shared
   EOF
 build-cert-manager:
   kustomize build cert-manager/248-sh > .cache/248-sh/cert-manager.yaml
@@ -85,6 +96,8 @@ sync-ingress-nginx:
     ingressClassResource:
       default: true
       enabled: true
+    nodeSelector:
+      env: shared
     service:
       type: LoadBalancer
       externalTrafficPolicy: Local

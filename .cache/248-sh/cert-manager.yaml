@@ -32064,6 +32064,8 @@ spec:
         - containerPort: 9402
           protocol: TCP
         resources: {}
+      nodeSelector:
+        env: shared
       securityContext:
         runAsNonRoot: true
       serviceAccountName: cert-manager
@@ -32112,6 +32114,8 @@ spec:
         imagePullPolicy: IfNotPresent
         name: cert-manager
         resources: {}
+      nodeSelector:
+        env: shared
       securityContext:
         runAsNonRoot: true
       serviceAccountName: cert-manager-cainjector
@@ -32187,6 +32191,8 @@ spec:
           successThreshold: 1
           timeoutSeconds: 1
         resources: {}
+      nodeSelector:
+        env: shared
       securityContext:
         runAsNonRoot: true
       serviceAccountName: cert-manager-webhook
@@ -32230,6 +32236,8 @@ spec:
         imagePullPolicy: IfNotPresent
         name: cert-manager
         resources: {}
+      nodeSelector:
+        env: shared
       restartPolicy: OnFailure
       securityContext:
         runAsNonRoot: true

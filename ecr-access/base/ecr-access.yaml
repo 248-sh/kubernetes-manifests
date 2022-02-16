@@ -11,6 +11,8 @@ spec:
       template:
         spec:
           serviceAccountName: ecr-access
+          nodeSelector:
+            env: shared
           containers:
             - name: ecr-access
               image: odaniait/aws-kubectl:latest

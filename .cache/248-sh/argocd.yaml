@@ -3030,6 +3030,8 @@ spec:
         name: redis
         ports:
         - containerPort: 6379
+      nodeSelector:
+        env: shared
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
@@ -3208,6 +3210,8 @@ spec:
         volumeMounts:
         - mountPath: /var/run/argocd
           name: var-files
+      nodeSelector:
+        env: shared
       volumes:
       - configMap:
           name: argocd-ssh-known-hosts-cm
@@ -3463,6 +3467,8 @@ spec:
           name: plugins-home
         - mountPath: /tmp
           name: tmp
+      nodeSelector:
+        env: shared
       serviceAccountName: argocd-server
       volumes:
       - emptyDir: {}
@@ -3648,6 +3654,8 @@ spec:
         - mountPath: /home/argocd
           name: argocd-home
         workingDir: /home/argocd
+      nodeSelector:
+        env: shared
       serviceAccountName: argocd-application-controller
       volumes:
       - emptyDir: {}

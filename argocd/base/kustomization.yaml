@@ -12,3 +12,4 @@ resources:
   # - upstream/argoproj/argo-cd/manifests/base/notification
 patchesStrategicMerge:
   - patch-argocd-cm.yaml
+  - patch-node-selectors.yaml
