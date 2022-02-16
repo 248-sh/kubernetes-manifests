@@ -17,9 +17,9 @@ spec:
                 topologyKey: kubernetes.io/hostname
               weight: 1
       containers:
-        - image: hasuraci/graphql-engine-pro:v2.2.0-pro.1
+        - name: hasura
+          image: hasuraci/graphql-engine-pro:v2.2.0-pro.1
           imagePullPolicy: IfNotPresent
-          name: hasura
           envFrom:
             - secretRef:
                 name: hasura
@@ -31,18 +31,11 @@ spec:
             httpGet:
               path: /healthz
               port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 5
+            initialDelaySeconds: 60
+            periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /healthz
               port: 8080
-            initialDelaySeconds: 5
+            initialDelaySeconds: 60
             periodSeconds: 10
-          resources:
-            limits:
-              cpu: 200m
-              memory: 900Mi
-            requests:
-              cpu: 200m
-              memory: 900Mi
