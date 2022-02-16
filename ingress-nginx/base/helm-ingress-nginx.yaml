@@ -619,6 +619,7 @@ spec:
       restartPolicy: OnFailure
       serviceAccountName: ingress-nginx-admission
       nodeSelector: 
+        env: shared
         kubernetes.io/os: linux
       securityContext:
         runAsNonRoot: true
@@ -673,6 +674,7 @@ spec:
       restartPolicy: OnFailure
       serviceAccountName: ingress-nginx-admission
       nodeSelector: 
+        env: shared
         kubernetes.io/os: linux
       securityContext:
         runAsNonRoot: true

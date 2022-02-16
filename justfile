@@ -89,6 +89,10 @@ sync-ingress-nginx:
   admissionWebhooks:
     timeoutSeconds: 29
   controller:
+    admissionWebhooks:
+      patch:
+        nodeSelector:
+          env: shared
     # config:
     #   use-proxy-protocol: "true"
     extraArgs:

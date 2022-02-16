@@ -544,6 +544,7 @@ spec:
         securityContext:
           allowPrivilegeEscalation: false
       nodeSelector:
+        env: shared
         kubernetes.io/os: linux
       restartPolicy: OnFailure
       securityContext:
@@ -597,6 +598,7 @@ spec:
         securityContext:
           allowPrivilegeEscalation: false
       nodeSelector:
+        env: shared
         kubernetes.io/os: linux
       restartPolicy: OnFailure
       securityContext:
