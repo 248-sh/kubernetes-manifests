@@ -10,7 +10,7 @@ build: build-argocd build-cert-manager build-cockroach build-external-dns build-
 # argocd
 sync-argocd:
   #!/usr/bin/env bash
-  just clone "/manifests" v2.2.3 https://github.com/argoproj/argo-cd.git argocd/base/upstream/argoproj/argo-cd
+  just clone "/manifests" v2.2.5 https://github.com/argoproj/argo-cd.git argocd/base/upstream/argoproj/argo-cd
 build-argocd:
   kustomize build argocd/248-sh > .cache/248-sh/argocd.yaml
 up-argocd: build-argocd
