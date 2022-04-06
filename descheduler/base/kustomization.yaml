@@ -1,0 +1,10 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: kube-system
+resources:
+  - github.com/kubernetes-sigs/descheduler/kubernetes/deployment?ref=v0.22.0
+  - kube-scheduler-configuration.yaml
+  - policies.yaml
+patchesStrategicMerge:
+  - patch-deployment-node-selectors.yaml
+  - patch-deployment-resources.yaml

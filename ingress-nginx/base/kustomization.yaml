@@ -3,3 +3,7 @@ kind: Kustomization
 namespace: ingress-nginx
 resources:
   - helm-ingress-nginx.yaml
+patchesStrategicMerge:
+  - patch-controller-config.yaml
+  - patch-controller-service.yaml
+  - patch-daemonset-resources.yaml

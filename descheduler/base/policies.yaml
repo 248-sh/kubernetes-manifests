@@ -1,0 +1,17 @@
+apiVersion: "descheduler/v1alpha1"
+kind: "DeschedulerPolicy"
+strategies:
+  "LowNodeUtilization":
+     enabled: false
+---
+apiVersion: "descheduler/v1alpha1"
+kind: "DeschedulerPolicy"
+strategies:
+  "HighNodeUtilization":
+     enabled: true
+     params:
+       nodeResourceUtilizationThresholds:
+         thresholds:
+           "cpu" : 20
+           "memory": 20
+           "pods": 20

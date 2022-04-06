@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbitmq-cluster-operator
+  namespace: rabbitmq-system
+spec:
+  template:
+    spec:
+      nodeSelector:
+        env: shared
+      containers:
+      - name: operator
+        resources:
+          # limits:
+          #   cpu: 100m
+          #   memory: 128Mi
+          requests:
+            cpu: 100m
+            memory: 128Mi

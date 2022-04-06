@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ingress-nginx-controller
+  namespace: ingress-nginx
+data:
+  disable-access-log: "false"
+  proxy-body-size: "0"
+  use-geoip: "false"
+  use-gzip: "false"
+  use-http2: "true"
+  # use-proxy-protocol: "true"

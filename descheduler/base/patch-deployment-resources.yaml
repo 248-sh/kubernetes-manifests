@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: descheduler
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      containers:
+        - name: descheduler
+          resources:
+            # limits:
+            #   cpu: 100m
+            #   memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi

@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    # https://github.com/digitalocean/digitalocean-cloud-controller-manager/blob/master/docs/controllers/services/annotations.md
+    service.beta.kubernetes.io/do-loadbalancer-algorithm: "round_robin"
+    service.beta.kubernetes.io/do-loadbalancer-disable-lets-encrypt-dns-records: "true"
+    service.beta.kubernetes.io/do-loadbalancer-enable-backend-keepalive: "true"
+    # service.beta.kubernetes.io/do-loadbalancer-enable-proxy-protocol: "true"
+    # service.beta.kubernetes.io/do-loadbalancer-hostname: "248.sh" # fixes broken header issue for the internal traffic when using proxy protocol
+    service.beta.kubernetes.io/do-loadbalancer-http2-ports: "443"
+    service.beta.kubernetes.io/do-loadbalancer-protocol: "http2"
+    service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https: "true"
+    service.beta.kubernetes.io/do-loadbalancer-size-unit: "1"
+    service.beta.kubernetes.io/do-loadbalancer-tls-passthrough: "true"
+  name: ingress-nginx-controller
+  namespace: ingress-nginx

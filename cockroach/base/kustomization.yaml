@@ -3,7 +3,6 @@ kind: Kustomization
 namePrefix: cockroach-operator-
 namespace: cockroach
 resources:
-  # - namespace.yaml
   - upstream/cockroachdb/cockroach-operator/config/crd
   - upstream/cockroachdb/cockroach-operator/config/rbac
   - upstream/cockroachdb/cockroach-operator/config/manager

@@ -4,18 +4,23 @@ metadata:
   name: hasura
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   template:
     spec:
       serviceAccountName: hasura
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
-            - podAffinityTerm:
+            - weight: 100
+              podAffinityTerm:
                 labelSelector:
                   matchLabels:
                     app.kubernetes.io/name: hasura
                 topologyKey: kubernetes.io/hostname
-              weight: 1
       containers:
         - name: hasura
           image: hasuraci/graphql-engine-pro:v2.2.0-pro.1
@@ -39,3 +44,10 @@ spec:
               port: 8080
             initialDelaySeconds: 60
             periodSeconds: 10
+          resources:
+            # limits:
+            #   cpu: 200m
+            #   memory: 1Gi
+            requests:
+              cpu: 200m
+              memory: 1Gi
