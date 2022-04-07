@@ -12,7 +12,7 @@ sync-aws-node:
 sync-cert-manager:
   #!/usr/bin/env bash
   helm repo add jetstack https://charts.jetstack.io
-  helm template cert-manager jetstack/cert-manager --namespace cert-manager --include-crds --version 1.6.1 -f - <<EOF > cert-manager/base/helm-cert-manager.yaml
+  helm template cert-manager jetstack/cert-manager --namespace cert-manager --include-crds --version 1.8.0 -f - <<EOF > cert-manager/base/helm-cert-manager.yaml
   nodeSelector:
     env: shared
   webhook:
