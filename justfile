@@ -84,7 +84,7 @@ sync-ingress-nginx:
 # monitoring
 sync-monitoring:
   #!/usr/bin/env bash
-  just clone "/example/prometheus-operator-crd" v0.54.0 https://github.com/prometheus-operator/prometheus-operator.git monitoring/base/upstream/prometheus-operator/prometheus-operator
+  just clone "/example/prometheus-operator-crd" v0.54.0 https://github.com/prometheus-operator/prometheus-operator.git monitoring/crds/upstream/prometheus-operator/prometheus-operator
   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
   helm repo add grafana https://grafana.github.io/helm-charts
   helm repo update

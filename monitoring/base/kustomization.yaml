@@ -2,14 +2,6 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: monitoring
 resources:
-  - upstream/prometheus-operator/prometheus-operator/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagerconfigs.yaml
-  - upstream/prometheus-operator/prometheus-operator/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
-  - upstream/prometheus-operator/prometheus-operator/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
-  - upstream/prometheus-operator/prometheus-operator/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml
-  - upstream/prometheus-operator/prometheus-operator/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
-  - upstream/prometheus-operator/prometheus-operator/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
-  - upstream/prometheus-operator/prometheus-operator/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
-  - upstream/prometheus-operator/prometheus-operator/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
   - eventrouter.yaml
   - helm-kube-prometheus-stack.yaml
   - helm-loki.yaml
