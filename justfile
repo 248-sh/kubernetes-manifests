@@ -199,10 +199,10 @@ sync-monitoring:
       maxUnavailable: 100%
   EOF
 
-# rabbitmq
-sync-rabbitmq:
+# rabbitmq-operator
+sync-rabbitmq-operator:
   #!/usr/bin/env bash
-  just clone "/config" v1.11.1 https://github.com/rabbitmq/cluster-operator.git rabbitmq/base/upstream/rabbitmq/cluster-operator
+  just clone "/config" v1.11.1 https://github.com/rabbitmq/cluster-operator.git rabbitmq-operator/base/upstream/rabbitmq/cluster-operator
 
 clone FILES TAG REPOSITORY FOLDER:
   #!/usr/bin/env bash
