@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.7](https://github.com/248-sh/kubernetes-manifests/compare/v1.2.6...v1.2.7) (2022-04-07)
+
+
+### Bug Fixes
+
+* fix `eventrouter` outdated manifests ([040cd7f](https://github.com/248-sh/kubernetes-manifests/commit/040cd7f652baeaaa50725481fc2c1f055649ca4e))
+
 ### [1.2.6](https://github.com/248-sh/kubernetes-manifests/compare/v1.2.5...v1.2.6) (2022-04-07)
 
 ### [1.2.5](https://github.com/248-sh/kubernetes-manifests/compare/v1.2.4...v1.2.5) (2022-04-06)
