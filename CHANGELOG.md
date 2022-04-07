@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.2.9](https://github.com/248-sh/kubernetes-manifests/compare/v1.2.8...v1.2.9) (2022-04-07)
+
+
+### Bug Fixes
+
+* add missing crd definitions ([6889f62](https://github.com/248-sh/kubernetes-manifests/commit/6889f622391335ab14edf7fa9ba1b9b4c507951f))
+
 ### [1.2.8](https://github.com/248-sh/kubernetes-manifests/compare/v1.2.7...v1.2.8) (2022-04-07)
 
 ### [1.2.7](https://github.com/248-sh/kubernetes-manifests/compare/v1.2.6...v1.2.7) (2022-04-07)
