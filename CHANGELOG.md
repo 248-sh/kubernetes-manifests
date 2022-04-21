@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/248-sh/kubernetes-manifests/compare/v1.2.11...v1.3.0) (2022-04-21)
+
+
+### Features
+
+* add eventstore ([1f6405a](https://github.com/248-sh/kubernetes-manifests/commit/1f6405a049509ac313762ff26858fbbe3c1d4c5f))
+
 ### [1.2.11](https://github.com/248-sh/kubernetes-manifests/compare/v1.2.10...v1.2.11) (2022-04-07)
 
 
