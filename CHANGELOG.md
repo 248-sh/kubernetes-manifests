@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/248-sh/kubernetes-manifests/compare/v1.3.0...v1.3.1) (2022-04-21)
+
+
+### Bug Fixes
+
+* rename eventstore to esdb to avoid some conflicts with k8s env vars ([79219cc](https://github.com/248-sh/kubernetes-manifests/commit/79219cce5d5e6d2077b4d521c080adaa35cab353))
+
 ## [1.3.0](https://github.com/248-sh/kubernetes-manifests/compare/v1.2.11...v1.3.0) (2022-04-21)
 
 
