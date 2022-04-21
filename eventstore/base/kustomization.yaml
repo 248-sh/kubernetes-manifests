@@ -5,7 +5,7 @@ resources:
   - deployment.yaml
   - service.yaml
 commonLabels:
-  app.kubernetes.io/name: eventstore
+  app.kubernetes.io/name: esdb
 images:
   - name: <app-image>
     newName: eventstore/eventstore
