@@ -38,12 +38,14 @@ spec:
               port: 8080
             initialDelaySeconds: 60
             periodSeconds: 10
+            timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: /healthz
               port: 8080
             initialDelaySeconds: 60
             periodSeconds: 10
+            timeoutSeconds: 5
           resources:
             # limits:
             #   cpu: 200m
