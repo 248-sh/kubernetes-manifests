@@ -153,7 +153,7 @@ sync-monitoring:
     env: monitoring
   persistence:
     enabled: true
-    size: 10Gi
+    size: 20Gi
   ruler:
     storage:
       type: local
