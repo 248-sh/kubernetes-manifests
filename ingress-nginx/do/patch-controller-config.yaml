@@ -6,6 +6,7 @@ metadata:
 data:
   disable-access-log: "false"
   proxy-body-size: "0"
+  use-forwarded-headers: "true"
   use-geoip: "false"
   use-gzip: "false"
   use-http2: "true"
