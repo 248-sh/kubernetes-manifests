@@ -1,0 +1,3 @@
+sync:
+  #!/usr/bin/env bash
+  just ../clone "/deploy" master https://github.com/yugabyte/yugabyte-operator.git yugabyte-operator/base/upstream/yugabyte/yugabyte-operator
