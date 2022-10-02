@@ -4,7 +4,7 @@ namespace: argocd
 images:
 - name: quay.io/argoproj/argocd
   newName: quay.io/argoproj/argocd
-  newTag: v2.2.5
+  newTag: v2.4.12
 resources:
   - upstream/argoproj/argo-cd/manifests/crds
   - upstream/argoproj/argo-cd/manifests/cluster-rbac
@@ -13,7 +13,8 @@ resources:
   - upstream/argoproj/argo-cd/manifests/base/repo-server
   - upstream/argoproj/argo-cd/manifests/base/server
   - upstream/argoproj/argo-cd/manifests/base/redis
-  # - upstream/argoproj/argo-cd/manifests/base/notification
+  - upstream/argoproj/argo-cd/manifests/base/notification
+  - upstream/argoproj/argo-cd/manifests/base/applicationset-controller
 patchesStrategicMerge:
   - patch-argocd-cm.yaml
   - patch-node-selectors.yaml

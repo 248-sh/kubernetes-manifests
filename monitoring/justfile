@@ -1,0 +1,116 @@
+sync:
+  #!/usr/bin/env bash
+  just ../clone "/example/prometheus-operator-crd" v0.54.0 https://github.com/prometheus-operator/prometheus-operator.git monitoring/crds/upstream/prometheus-operator/prometheus-operator
+  helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+  helm repo add grafana https://grafana.github.io/helm-charts
+  helm repo update
+  helm template monitoring prometheus-community/kube-prometheus-stack --namespace monitoring --version 32.2.1 --skip-crds --skip-tests -f - <<EOF > base/helm-kube-prometheus-stack.yaml
+  coreDns:
+    enabled: false
+  kubeControllerManager:
+    enabled: false
+  kubeEtcd:
+    enabled: false
+  kubeProxy:
+    enabled: false
+  kubeScheduler:
+    enabled: false
+  defaultRules:
+    rules:
+      etcd: false
+      kubeProxy: false
+      kubeScheduler: false
+  alertmanager:
+    alertmanagerSpec:
+      alertmanagerConfigSelector:
+        matchLabels:
+          role: alertmanager-config
+      nodeSelector:
+        env: monitoring
+  grafana:
+    nodeSelector:
+      env: monitoring
+    persistence:
+      enabled: true
+      size: 1Gi
+    additionalDataSources:
+      - name: Loki
+        type: loki
+        url: http://monitoring-loki.monitoring:3100
+        access: proxy
+        version: 1
+  prometheusOperator:
+    admissionWebhooks:
+      patch:
+        nodeSelector:
+          env: monitoring
+    nodeSelector:
+      env: monitoring
+  prometheus:
+    prometheusSpec:
+      nodeSelector:
+        env: monitoring
+      # scrapeInterval: 15s
+      # scrapeTimeout: 5s
+      # evaluationInterval: 30s
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: do-block-storage
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 20Gi
+      podMonitorSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
+  EOF
+  helm template monitoring grafana/loki --namespace monitoring --version 2.9.1 --skip-crds --skip-tests -f - <<EOF > base/helm-loki.yaml
+  nodeSelector:
+    env: monitoring
+  persistence:
+    enabled: true
+    size: 20Gi
+  ruler:
+    storage:
+      type: local
+      local:
+        directory: /rules
+    rule_path: /tmp/scratch
+    alertmanager_url: http://monitoring-kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
+    ring:
+      kvstore:
+        store: inmemory
+    enable_api: true
+  EOF
+  helm template monitoring grafana/promtail --namespace monitoring --version 3.11.0 --skip-crds --skip-tests -f - <<EOF > base/helm-promtail.yaml
+  config:
+    lokiAddress: http://monitoring-loki.monitoring:3100/loki/api/v1/push
+    # too expensive..
+    # snippets:
+    #   pipelineStages:
+    #     - cri: {}
+    #     - match:
+    #         selector: '{app="eventrouter"}'
+    #         stages:
+    #           - json:
+    #               expressions:
+    #                 event_verb: verb
+    #                 event_kind: event.involvedObject.kind
+    #                 event_reason: event.reason
+    #                 event_namespace: event.involvedObject.namespace
+    #                 event_name: event.metadata.name
+    #                 event_source_host: event.source.host
+    #                 event_source_component: event.source.component
+    #           - labels:
+    #               event_verb:
+    #               event_kind:
+    #               event_reason:
+    #               event_namespace:
+    #               event_name:
+    #               event_source_host:
+    #               event_source_component:
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 100%
+  EOF

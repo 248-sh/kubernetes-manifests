@@ -1,0 +1,3 @@
+sync:
+  #!/usr/bin/env bash
+  just ../clone "/config" v2.5.0 https://github.com/cockroachdb/cockroach-operator.git cockroach/base/upstream/cockroachdb/cockroach-operator

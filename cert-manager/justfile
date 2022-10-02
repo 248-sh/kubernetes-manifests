@@ -1,0 +1,16 @@
+sync:
+  #!/usr/bin/env bash
+  helm repo add jetstack https://charts.jetstack.io
+  helm template cert-manager jetstack/cert-manager --namespace cert-manager --include-crds --version 1.9.1 -f - <<EOF > base/helm-cert-manager.yaml
+  nodeSelector:
+    env: shared
+  webhook:
+    nodeSelector:
+      env: shared
+  cainjector:
+    nodeSelector:
+      env: shared
+  startupapicheck:
+    nodeSelector:
+      env: shared
+  EOF

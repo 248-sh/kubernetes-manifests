@@ -1,0 +1,48 @@
+sync:
+  #!/usr/bin/env bash
+  helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+  helm repo update
+  helm template ingress-nginx ingress-nginx/ingress-nginx --namespace ingress-nginx --include-crds --version 4.2.5 -f - <<EOF > base/helm-ingress-nginx.yaml
+  admissionWebhooks:
+    timeoutSeconds: 29
+  controller:
+    admissionWebhooks:
+      patch:
+        nodeSelector:
+          env: shared
+    affinity:
+      podAntiAffinity:
+        preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/name: ingress-nginx
+                  app.kubernetes.io/component: controller
+                  app.kubernetes.io/instance: ingress-nginx
+              topologyKey: kubernetes.io/hostname
+    extraArgs:
+      default-ssl-certificate: "cert-manager/certificate-secret"
+    ingressClassResource:
+      default: true
+      enabled: true
+    kind: DaemonSet
+    metrics:
+      enabled: "true"
+      serviceMonitor:
+        enabled: "true"
+        additionalLabels:
+          release: prometheus
+    service:
+      type: LoadBalancer
+      # externalTrafficPolicy: Local
+      # internalTrafficPolicy: Local
+      externalTrafficPolicy: Cluster
+      internalTrafficPolicy: Cluster
+    updateStrategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 0
+        maxUnavailable: 1
+    watchIngressWithoutClass: true
+  EOF
