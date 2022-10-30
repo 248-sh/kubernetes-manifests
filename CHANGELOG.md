@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/248-sh/kubernetes-manifests/compare/v1.4.0...v1.5.0) (2022-10-30)
+
+
+### Features
+
+* add dapr ([9b259b4](https://github.com/248-sh/kubernetes-manifests/commit/9b259b4d6e4a13060775392a93c500323c4fe1ef))
+
 ## [1.4.0](https://github.com/248-sh/kubernetes-manifests/compare/v1.3.6...v1.4.0) (2022-10-02)
 
 
