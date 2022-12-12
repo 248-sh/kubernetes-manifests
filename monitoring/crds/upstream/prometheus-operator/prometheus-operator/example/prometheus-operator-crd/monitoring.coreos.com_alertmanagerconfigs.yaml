@@ -1,10 +1,9 @@
-
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.2
+    controller-gen.kubebuilder.io/version: v0.9.2
   creationTimestamp: null
   name: alertmanagerconfigs.monitoring.coreos.com
 spec:
@@ -15,6 +14,8 @@ spec:
     kind: AlertmanagerConfig
     listKind: AlertmanagerConfigList
     plural: alertmanagerconfigs
+    shortNames:
+    - amcfg
     singular: alertmanagerconfig
   scope: Namespaced
   versions:
@@ -44,7 +45,7 @@ spec:
             properties:
               inhibitRules:
                 description: List of inhibition rules. The rules will only apply to
-                  alerts matching the resource’s namespace.
+                  alerts matching the resource's namespace.
                 items:
                   description: InhibitRule defines an inhibition rule that allows
                     to mute alerts when other alerts are already firing. See https://prometheus.io/docs/alerting/latest/configuration/#inhibit_rule
@@ -58,7 +59,7 @@ spec:
                     sourceMatch:
                       description: Matchers for which one or more alerts have to exist
                         for the inhibition to take effect. The operator enforces that
-                        the alert matches the resource’s namespace.
+                        the alert matches the resource's namespace.
                       items:
                         description: Matcher defines how to match on alert's labels.
                         properties:
@@ -91,7 +92,7 @@ spec:
                     targetMatch:
                       description: Matchers that have to be fulfilled in the alerts
                         to be muted. The operator enforces that the alert matches
-                        the resource’s namespace.
+                        the resource's namespace.
                       items:
                         description: Matcher defines how to match on alert's labels.
                         properties:
@@ -311,8 +312,8 @@ spec:
                             description: TLS configuration
                             properties:
                               ca:
-                                description: Struct containing the CA cert to use
-                                  for the targets.
+                                description: Certificate authority used when verifying
+                                  server certificates.
                                 properties:
                                   configMap:
                                     description: ConfigMap containing data to use
@@ -334,6 +335,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   secret:
                                     description: Secret containing data to use for
                                       the targets.
@@ -355,10 +357,11 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                 type: object
                               cert:
-                                description: Struct containing the client cert file
-                                  for the targets.
+                                description: Client certificate to present when doing
+                                  client-authentication.
                                 properties:
                                   configMap:
                                     description: ConfigMap containing data to use
@@ -380,6 +383,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   secret:
                                     description: Secret containing data to use for
                                       the targets.
@@ -401,6 +405,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                 type: object
                               insecureSkipVerify:
                                 description: Disable target certificate validation.
@@ -426,6 +431,7 @@ spec:
                                 required:
                                 - key
                                 type: object
+                                x-kubernetes-map-type: atomic
                               serverName:
                                 description: Used to verify the hostname for the targets.
                                 type: string
@@ -446,6 +452,10 @@ spec:
                         description: OpsGenieConfig configures notifications via OpsGenie.
                           See https://prometheus.io/docs/alerting/latest/configuration/#opsgenie_config
                         properties:
+                          actions:
+                            description: Comma separated list of actions that will
+                              be available for the alert.
+                            type: string
                           apiKey:
                             description: The secret's key that contains the OpsGenie
                               API key. The secret needs to be in the same namespace
@@ -492,6 +502,10 @@ spec:
                               - value
                               type: object
                             type: array
+                          entity:
+                            description: Optional field that can be used to specify
+                              which domain alert is related to.
+                            type: string
                           httpConfig:
                             description: HTTP client configuration.
                             properties:
@@ -522,6 +536,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   type:
                                     description: Set the authentication type. Defaults
                                       to Bearer, Basic will cause an error
@@ -553,6 +568,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   username:
                                     description: The secret in the service monitor
                                       namespace that contains the username for authentication.
@@ -574,6 +590,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                 type: object
                               bearerTokenSecret:
                                 description: The secret's key that contains the bearer
@@ -599,6 +616,106 @@ spec:
                                 required:
                                 - key
                                 type: object
+                              followRedirects:
+                                description: FollowRedirects specifies whether the
+                                  client should follow HTTP 3xx redirects.
+                                type: boolean
+                              oauth2:
+                                description: OAuth2 client credentials used to fetch
+                                  a token for the targets.
+                                properties:
+                                  clientId:
+                                    description: The secret or configmap containing
+                                      the OAuth2 client id
+                                    properties:
+                                      configMap:
+                                        description: ConfigMap containing data to
+                                          use for the targets.
+                                        properties:
+                                          key:
+                                            description: The key to select.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the ConfigMap
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                      secret:
+                                        description: Secret containing data to use
+                                          for the targets.
+                                        properties:
+                                          key:
+                                            description: The key of the secret to
+                                              select from.  Must be a valid secret
+                                              key.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the Secret
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                    type: object
+                                  clientSecret:
+                                    description: The secret containing the OAuth2
+                                      client secret
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  endpointParams:
+                                    additionalProperties:
+                                      type: string
+                                    description: Parameters to append to the token
+                                      URL
+                                    type: object
+                                  scopes:
+                                    description: OAuth2 scopes used for the token
+                                      request
+                                    items:
+                                      type: string
+                                    type: array
+                                  tokenUrl:
+                                    description: The URL to fetch the token from
+                                    minLength: 1
+                                    type: string
+                                required:
+                                - clientId
+                                - clientSecret
+                                - tokenUrl
+                                type: object
                               proxyURL:
                                 description: Optional proxy URL.
                                 type: string
@@ -606,8 +723,8 @@ spec:
                                 description: TLS configuration for the client.
                                 properties:
                                   ca:
-                                    description: Struct containing the CA cert to
-                                      use for the targets.
+                                    description: Certificate authority used when verifying
+                                      server certificates.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -629,6 +746,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -651,10 +769,11 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   cert:
-                                    description: Struct containing the client cert
-                                      file for the targets.
+                                    description: Client certificate to present when
+                                      doing client-authentication.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -676,6 +795,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -698,6 +818,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   insecureSkipVerify:
                                     description: Disable target certificate validation.
@@ -723,6 +844,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   serverName:
                                     description: Used to verify the hostname for the
                                       targets.
@@ -754,6 +876,12 @@ spec:
                                   type: string
                                 type:
                                   description: Type of responder.
+                                  enum:
+                                  - team
+                                  - teams
+                                  - user
+                                  - escalation
+                                  - schedule
                                   minLength: 1
                                   type: string
                                 username:
@@ -773,6 +901,12 @@ spec:
                             description: Comma separated list of tags attached to
                               the notifications.
                             type: string
+                          updateAlerts:
+                            description: Whether to update message and description
+                              of the alert in OpsGenie if it already exists By default,
+                              the alert is never updated in OpsGenie, the new message
+                              only appears in activity log.
+                            type: boolean
                         type: object
                       type: array
                     pagerdutyConfigs:
@@ -848,6 +982,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   type:
                                     description: Set the authentication type. Defaults
                                       to Bearer, Basic will cause an error
@@ -879,6 +1014,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   username:
                                     description: The secret in the service monitor
                                       namespace that contains the username for authentication.
@@ -900,6 +1036,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                 type: object
                               bearerTokenSecret:
                                 description: The secret's key that contains the bearer
@@ -925,6 +1062,106 @@ spec:
                                 required:
                                 - key
                                 type: object
+                              followRedirects:
+                                description: FollowRedirects specifies whether the
+                                  client should follow HTTP 3xx redirects.
+                                type: boolean
+                              oauth2:
+                                description: OAuth2 client credentials used to fetch
+                                  a token for the targets.
+                                properties:
+                                  clientId:
+                                    description: The secret or configmap containing
+                                      the OAuth2 client id
+                                    properties:
+                                      configMap:
+                                        description: ConfigMap containing data to
+                                          use for the targets.
+                                        properties:
+                                          key:
+                                            description: The key to select.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the ConfigMap
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                      secret:
+                                        description: Secret containing data to use
+                                          for the targets.
+                                        properties:
+                                          key:
+                                            description: The key of the secret to
+                                              select from.  Must be a valid secret
+                                              key.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the Secret
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                    type: object
+                                  clientSecret:
+                                    description: The secret containing the OAuth2
+                                      client secret
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  endpointParams:
+                                    additionalProperties:
+                                      type: string
+                                    description: Parameters to append to the token
+                                      URL
+                                    type: object
+                                  scopes:
+                                    description: OAuth2 scopes used for the token
+                                      request
+                                    items:
+                                      type: string
+                                    type: array
+                                  tokenUrl:
+                                    description: The URL to fetch the token from
+                                    minLength: 1
+                                    type: string
+                                required:
+                                - clientId
+                                - clientSecret
+                                - tokenUrl
+                                type: object
                               proxyURL:
                                 description: Optional proxy URL.
                                 type: string
@@ -932,8 +1169,8 @@ spec:
                                 description: TLS configuration for the client.
                                 properties:
                                   ca:
-                                    description: Struct containing the CA cert to
-                                      use for the targets.
+                                    description: Certificate authority used when verifying
+                                      server certificates.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -955,6 +1192,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -977,10 +1215,11 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   cert:
-                                    description: Struct containing the client cert
-                                      file for the targets.
+                                    description: Client certificate to present when
+                                      doing client-authentication.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -1002,6 +1241,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -1024,6 +1264,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   insecureSkipVerify:
                                     description: Disable target certificate validation.
@@ -1049,6 +1290,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   serverName:
                                     description: Used to verify the hostname for the
                                       targets.
@@ -1196,6 +1438,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   type:
                                     description: Set the authentication type. Defaults
                                       to Bearer, Basic will cause an error
@@ -1227,6 +1470,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   username:
                                     description: The secret in the service monitor
                                       namespace that contains the username for authentication.
@@ -1248,6 +1492,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                 type: object
                               bearerTokenSecret:
                                 description: The secret's key that contains the bearer
@@ -1273,6 +1518,106 @@ spec:
                                 required:
                                 - key
                                 type: object
+                              followRedirects:
+                                description: FollowRedirects specifies whether the
+                                  client should follow HTTP 3xx redirects.
+                                type: boolean
+                              oauth2:
+                                description: OAuth2 client credentials used to fetch
+                                  a token for the targets.
+                                properties:
+                                  clientId:
+                                    description: The secret or configmap containing
+                                      the OAuth2 client id
+                                    properties:
+                                      configMap:
+                                        description: ConfigMap containing data to
+                                          use for the targets.
+                                        properties:
+                                          key:
+                                            description: The key to select.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the ConfigMap
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                      secret:
+                                        description: Secret containing data to use
+                                          for the targets.
+                                        properties:
+                                          key:
+                                            description: The key of the secret to
+                                              select from.  Must be a valid secret
+                                              key.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the Secret
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                    type: object
+                                  clientSecret:
+                                    description: The secret containing the OAuth2
+                                      client secret
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  endpointParams:
+                                    additionalProperties:
+                                      type: string
+                                    description: Parameters to append to the token
+                                      URL
+                                    type: object
+                                  scopes:
+                                    description: OAuth2 scopes used for the token
+                                      request
+                                    items:
+                                      type: string
+                                    type: array
+                                  tokenUrl:
+                                    description: The URL to fetch the token from
+                                    minLength: 1
+                                    type: string
+                                required:
+                                - clientId
+                                - clientSecret
+                                - tokenUrl
+                                type: object
                               proxyURL:
                                 description: Optional proxy URL.
                                 type: string
@@ -1280,8 +1625,8 @@ spec:
                                 description: TLS configuration for the client.
                                 properties:
                                   ca:
-                                    description: Struct containing the CA cert to
-                                      use for the targets.
+                                    description: Certificate authority used when verifying
+                                      server certificates.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -1303,6 +1648,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -1325,10 +1671,11 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   cert:
-                                    description: Struct containing the client cert
-                                      file for the targets.
+                                    description: Client certificate to present when
+                                      doing client-authentication.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -1350,6 +1697,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -1372,6 +1720,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   insecureSkipVerify:
                                     description: Disable target certificate validation.
@@ -1397,6 +1746,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   serverName:
                                     description: Used to verify the hostname for the
                                       targets.
@@ -1428,7 +1778,7 @@ spec:
                             type: string
                           token:
                             description: The secret's key that contains the registered
-                              application’s API token, see https://pushover.net/apps.
+                              application's API token, see https://pushover.net/apps.
                               The secret needs to be in the same namespace as the
                               AlertmanagerConfig object and accessible by the Prometheus
                               Operator.
@@ -1458,7 +1808,7 @@ spec:
                             type: string
                           userKey:
                             description: The secret's key that contains the recipient
-                              user’s user key. The secret needs to be in the same
+                              user's user key. The secret needs to be in the same
                               namespace as the AlertmanagerConfig object and accessible
                               by the Prometheus Operator.
                             properties:
@@ -1622,6 +1972,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   type:
                                     description: Set the authentication type. Defaults
                                       to Bearer, Basic will cause an error
@@ -1653,6 +2004,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   username:
                                     description: The secret in the service monitor
                                       namespace that contains the username for authentication.
@@ -1674,6 +2026,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                 type: object
                               bearerTokenSecret:
                                 description: The secret's key that contains the bearer
@@ -1699,6 +2052,106 @@ spec:
                                 required:
                                 - key
                                 type: object
+                              followRedirects:
+                                description: FollowRedirects specifies whether the
+                                  client should follow HTTP 3xx redirects.
+                                type: boolean
+                              oauth2:
+                                description: OAuth2 client credentials used to fetch
+                                  a token for the targets.
+                                properties:
+                                  clientId:
+                                    description: The secret or configmap containing
+                                      the OAuth2 client id
+                                    properties:
+                                      configMap:
+                                        description: ConfigMap containing data to
+                                          use for the targets.
+                                        properties:
+                                          key:
+                                            description: The key to select.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the ConfigMap
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                      secret:
+                                        description: Secret containing data to use
+                                          for the targets.
+                                        properties:
+                                          key:
+                                            description: The key of the secret to
+                                              select from.  Must be a valid secret
+                                              key.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the Secret
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                    type: object
+                                  clientSecret:
+                                    description: The secret containing the OAuth2
+                                      client secret
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  endpointParams:
+                                    additionalProperties:
+                                      type: string
+                                    description: Parameters to append to the token
+                                      URL
+                                    type: object
+                                  scopes:
+                                    description: OAuth2 scopes used for the token
+                                      request
+                                    items:
+                                      type: string
+                                    type: array
+                                  tokenUrl:
+                                    description: The URL to fetch the token from
+                                    minLength: 1
+                                    type: string
+                                required:
+                                - clientId
+                                - clientSecret
+                                - tokenUrl
+                                type: object
                               proxyURL:
                                 description: Optional proxy URL.
                                 type: string
@@ -1706,8 +2159,8 @@ spec:
                                 description: TLS configuration for the client.
                                 properties:
                                   ca:
-                                    description: Struct containing the CA cert to
-                                      use for the targets.
+                                    description: Certificate authority used when verifying
+                                      server certificates.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -1729,6 +2182,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -1751,10 +2205,11 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   cert:
-                                    description: Struct containing the client cert
-                                      file for the targets.
+                                    description: Client certificate to present when
+                                      doing client-authentication.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -1776,6 +2231,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -1798,6 +2254,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   insecureSkipVerify:
                                     description: Disable target certificate validation.
@@ -1823,6 +2280,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   serverName:
                                     description: Used to verify the hostname for the
                                       targets.
@@ -1906,6 +2364,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   type:
                                     description: Set the authentication type. Defaults
                                       to Bearer, Basic will cause an error
@@ -1937,6 +2396,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   username:
                                     description: The secret in the service monitor
                                       namespace that contains the username for authentication.
@@ -1958,6 +2418,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                 type: object
                               bearerTokenSecret:
                                 description: The secret's key that contains the bearer
@@ -1983,6 +2444,106 @@ spec:
                                 required:
                                 - key
                                 type: object
+                              followRedirects:
+                                description: FollowRedirects specifies whether the
+                                  client should follow HTTP 3xx redirects.
+                                type: boolean
+                              oauth2:
+                                description: OAuth2 client credentials used to fetch
+                                  a token for the targets.
+                                properties:
+                                  clientId:
+                                    description: The secret or configmap containing
+                                      the OAuth2 client id
+                                    properties:
+                                      configMap:
+                                        description: ConfigMap containing data to
+                                          use for the targets.
+                                        properties:
+                                          key:
+                                            description: The key to select.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the ConfigMap
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                      secret:
+                                        description: Secret containing data to use
+                                          for the targets.
+                                        properties:
+                                          key:
+                                            description: The key of the secret to
+                                              select from.  Must be a valid secret
+                                              key.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the Secret
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                    type: object
+                                  clientSecret:
+                                    description: The secret containing the OAuth2
+                                      client secret
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  endpointParams:
+                                    additionalProperties:
+                                      type: string
+                                    description: Parameters to append to the token
+                                      URL
+                                    type: object
+                                  scopes:
+                                    description: OAuth2 scopes used for the token
+                                      request
+                                    items:
+                                      type: string
+                                    type: array
+                                  tokenUrl:
+                                    description: The URL to fetch the token from
+                                    minLength: 1
+                                    type: string
+                                required:
+                                - clientId
+                                - clientSecret
+                                - tokenUrl
+                                type: object
                               proxyURL:
                                 description: Optional proxy URL.
                                 type: string
@@ -1990,8 +2551,8 @@ spec:
                                 description: TLS configuration for the client.
                                 properties:
                                   ca:
-                                    description: Struct containing the CA cert to
-                                      use for the targets.
+                                    description: Certificate authority used when verifying
+                                      server certificates.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -2013,6 +2574,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -2035,10 +2597,11 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   cert:
-                                    description: Struct containing the client cert
-                                      file for the targets.
+                                    description: Client certificate to present when
+                                      doing client-authentication.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -2060,6 +2623,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -2082,6 +2646,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   insecureSkipVerify:
                                     description: Disable target certificate validation.
@@ -2107,6 +2672,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   serverName:
                                     description: Used to verify the hostname for the
                                       targets.
@@ -2150,6 +2716,7 @@ spec:
                                 required:
                                 - key
                                 type: object
+                                x-kubernetes-map-type: atomic
                               profile:
                                 description: Profile is the named AWS profile used
                                   to authenticate.
@@ -2184,6 +2751,7 @@ spec:
                                 required:
                                 - key
                                 type: object
+                                x-kubernetes-map-type: atomic
                             type: object
                           subject:
                             description: Subject line when the message is delivered
@@ -2200,6 +2768,404 @@ spec:
                               If you don't specify this value, you must specify a
                               value for the PhoneNumber or TargetARN.
                             type: string
+                        type: object
+                      type: array
+                    telegramConfigs:
+                      description: List of Telegram configurations.
+                      items:
+                        description: TelegramConfig configures notifications via Telegram.
+                          See https://prometheus.io/docs/alerting/latest/configuration/#telegram_config
+                        properties:
+                          apiURL:
+                            description: The Telegram API URL i.e. https://api.telegram.org.
+                              If not specified, default API URL will be used.
+                            type: string
+                          botToken:
+                            description: Telegram bot token The secret needs to be
+                              in the same namespace as the AlertmanagerConfig object
+                              and accessible by the Prometheus Operator.
+                            properties:
+                              key:
+                                description: The key of the secret to select from.  Must
+                                  be a valid secret key.
+                                type: string
+                              name:
+                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                  TODO: Add other useful fields. apiVersion, kind,
+                                  uid?'
+                                type: string
+                              optional:
+                                description: Specify whether the Secret or its key
+                                  must be defined
+                                type: boolean
+                            required:
+                            - key
+                            type: object
+                          chatID:
+                            description: The Telegram chat ID.
+                            format: int64
+                            type: integer
+                          disableNotifications:
+                            description: Disable telegram notifications
+                            type: boolean
+                          httpConfig:
+                            description: HTTP client configuration.
+                            properties:
+                              authorization:
+                                description: Authorization header configuration for
+                                  the client. This is mutually exclusive with BasicAuth
+                                  and is only available starting from Alertmanager
+                                  v0.22+.
+                                properties:
+                                  credentials:
+                                    description: The secret's key that contains the
+                                      credentials of the request
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  type:
+                                    description: Set the authentication type. Defaults
+                                      to Bearer, Basic will cause an error
+                                    type: string
+                                type: object
+                              basicAuth:
+                                description: BasicAuth for the client. This is mutually
+                                  exclusive with Authorization. If both are defined,
+                                  BasicAuth takes precedence.
+                                properties:
+                                  password:
+                                    description: The secret in the service monitor
+                                      namespace that contains the password for authentication.
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  username:
+                                    description: The secret in the service monitor
+                                      namespace that contains the username for authentication.
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                type: object
+                              bearerTokenSecret:
+                                description: The secret's key that contains the bearer
+                                  token to be used by the client for authentication.
+                                  The secret needs to be in the same namespace as
+                                  the AlertmanagerConfig object and accessible by
+                                  the Prometheus Operator.
+                                properties:
+                                  key:
+                                    description: The key of the secret to select from.  Must
+                                      be a valid secret key.
+                                    type: string
+                                  name:
+                                    description: 'Name of the referent. More info:
+                                      https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                      TODO: Add other useful fields. apiVersion, kind,
+                                      uid?'
+                                    type: string
+                                  optional:
+                                    description: Specify whether the Secret or its
+                                      key must be defined
+                                    type: boolean
+                                required:
+                                - key
+                                type: object
+                              followRedirects:
+                                description: FollowRedirects specifies whether the
+                                  client should follow HTTP 3xx redirects.
+                                type: boolean
+                              oauth2:
+                                description: OAuth2 client credentials used to fetch
+                                  a token for the targets.
+                                properties:
+                                  clientId:
+                                    description: The secret or configmap containing
+                                      the OAuth2 client id
+                                    properties:
+                                      configMap:
+                                        description: ConfigMap containing data to
+                                          use for the targets.
+                                        properties:
+                                          key:
+                                            description: The key to select.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the ConfigMap
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                      secret:
+                                        description: Secret containing data to use
+                                          for the targets.
+                                        properties:
+                                          key:
+                                            description: The key of the secret to
+                                              select from.  Must be a valid secret
+                                              key.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the Secret
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                    type: object
+                                  clientSecret:
+                                    description: The secret containing the OAuth2
+                                      client secret
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  endpointParams:
+                                    additionalProperties:
+                                      type: string
+                                    description: Parameters to append to the token
+                                      URL
+                                    type: object
+                                  scopes:
+                                    description: OAuth2 scopes used for the token
+                                      request
+                                    items:
+                                      type: string
+                                    type: array
+                                  tokenUrl:
+                                    description: The URL to fetch the token from
+                                    minLength: 1
+                                    type: string
+                                required:
+                                - clientId
+                                - clientSecret
+                                - tokenUrl
+                                type: object
+                              proxyURL:
+                                description: Optional proxy URL.
+                                type: string
+                              tlsConfig:
+                                description: TLS configuration for the client.
+                                properties:
+                                  ca:
+                                    description: Certificate authority used when verifying
+                                      server certificates.
+                                    properties:
+                                      configMap:
+                                        description: ConfigMap containing data to
+                                          use for the targets.
+                                        properties:
+                                          key:
+                                            description: The key to select.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the ConfigMap
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                      secret:
+                                        description: Secret containing data to use
+                                          for the targets.
+                                        properties:
+                                          key:
+                                            description: The key of the secret to
+                                              select from.  Must be a valid secret
+                                              key.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the Secret
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                    type: object
+                                  cert:
+                                    description: Client certificate to present when
+                                      doing client-authentication.
+                                    properties:
+                                      configMap:
+                                        description: ConfigMap containing data to
+                                          use for the targets.
+                                        properties:
+                                          key:
+                                            description: The key to select.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the ConfigMap
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                      secret:
+                                        description: Secret containing data to use
+                                          for the targets.
+                                        properties:
+                                          key:
+                                            description: The key of the secret to
+                                              select from.  Must be a valid secret
+                                              key.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the Secret
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                    type: object
+                                  insecureSkipVerify:
+                                    description: Disable target certificate validation.
+                                    type: boolean
+                                  keySecret:
+                                    description: Secret containing the client key
+                                      file for the targets.
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  serverName:
+                                    description: Used to verify the hostname for the
+                                      targets.
+                                    type: string
+                                type: object
+                            type: object
+                          message:
+                            description: Message template
+                            type: string
+                          parseMode:
+                            description: Parse mode for telegram message
+                            enum:
+                            - MarkdownV2
+                            - Markdown
+                            - HTML
+                            type: string
+                          sendResolved:
+                            description: Whether to notify about resolved alerts.
+                            type: boolean
                         type: object
                       type: array
                     victoropsConfigs:
@@ -2283,6 +3249,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   type:
                                     description: Set the authentication type. Defaults
                                       to Bearer, Basic will cause an error
@@ -2314,6 +3281,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   username:
                                     description: The secret in the service monitor
                                       namespace that contains the username for authentication.
@@ -2335,6 +3303,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                 type: object
                               bearerTokenSecret:
                                 description: The secret's key that contains the bearer
@@ -2360,6 +3329,106 @@ spec:
                                 required:
                                 - key
                                 type: object
+                              followRedirects:
+                                description: FollowRedirects specifies whether the
+                                  client should follow HTTP 3xx redirects.
+                                type: boolean
+                              oauth2:
+                                description: OAuth2 client credentials used to fetch
+                                  a token for the targets.
+                                properties:
+                                  clientId:
+                                    description: The secret or configmap containing
+                                      the OAuth2 client id
+                                    properties:
+                                      configMap:
+                                        description: ConfigMap containing data to
+                                          use for the targets.
+                                        properties:
+                                          key:
+                                            description: The key to select.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the ConfigMap
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                      secret:
+                                        description: Secret containing data to use
+                                          for the targets.
+                                        properties:
+                                          key:
+                                            description: The key of the secret to
+                                              select from.  Must be a valid secret
+                                              key.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the Secret
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                    type: object
+                                  clientSecret:
+                                    description: The secret containing the OAuth2
+                                      client secret
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  endpointParams:
+                                    additionalProperties:
+                                      type: string
+                                    description: Parameters to append to the token
+                                      URL
+                                    type: object
+                                  scopes:
+                                    description: OAuth2 scopes used for the token
+                                      request
+                                    items:
+                                      type: string
+                                    type: array
+                                  tokenUrl:
+                                    description: The URL to fetch the token from
+                                    minLength: 1
+                                    type: string
+                                required:
+                                - clientId
+                                - clientSecret
+                                - tokenUrl
+                                type: object
                               proxyURL:
                                 description: Optional proxy URL.
                                 type: string
@@ -2367,8 +3436,8 @@ spec:
                                 description: TLS configuration for the client.
                                 properties:
                                   ca:
-                                    description: Struct containing the CA cert to
-                                      use for the targets.
+                                    description: Certificate authority used when verifying
+                                      server certificates.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -2390,6 +3459,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -2412,10 +3482,11 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   cert:
-                                    description: Struct containing the client cert
-                                      file for the targets.
+                                    description: Client certificate to present when
+                                      doing client-authentication.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -2437,6 +3508,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -2459,6 +3531,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   insecureSkipVerify:
                                     description: Disable target certificate validation.
@@ -2484,6 +3557,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   serverName:
                                     description: Used to verify the hostname for the
                                       targets.
@@ -2546,6 +3620,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   type:
                                     description: Set the authentication type. Defaults
                                       to Bearer, Basic will cause an error
@@ -2577,6 +3652,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   username:
                                     description: The secret in the service monitor
                                       namespace that contains the username for authentication.
@@ -2598,6 +3674,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                 type: object
                               bearerTokenSecret:
                                 description: The secret's key that contains the bearer
@@ -2623,6 +3700,106 @@ spec:
                                 required:
                                 - key
                                 type: object
+                              followRedirects:
+                                description: FollowRedirects specifies whether the
+                                  client should follow HTTP 3xx redirects.
+                                type: boolean
+                              oauth2:
+                                description: OAuth2 client credentials used to fetch
+                                  a token for the targets.
+                                properties:
+                                  clientId:
+                                    description: The secret or configmap containing
+                                      the OAuth2 client id
+                                    properties:
+                                      configMap:
+                                        description: ConfigMap containing data to
+                                          use for the targets.
+                                        properties:
+                                          key:
+                                            description: The key to select.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the ConfigMap
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                      secret:
+                                        description: Secret containing data to use
+                                          for the targets.
+                                        properties:
+                                          key:
+                                            description: The key of the secret to
+                                              select from.  Must be a valid secret
+                                              key.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the Secret
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                    type: object
+                                  clientSecret:
+                                    description: The secret containing the OAuth2
+                                      client secret
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  endpointParams:
+                                    additionalProperties:
+                                      type: string
+                                    description: Parameters to append to the token
+                                      URL
+                                    type: object
+                                  scopes:
+                                    description: OAuth2 scopes used for the token
+                                      request
+                                    items:
+                                      type: string
+                                    type: array
+                                  tokenUrl:
+                                    description: The URL to fetch the token from
+                                    minLength: 1
+                                    type: string
+                                required:
+                                - clientId
+                                - clientSecret
+                                - tokenUrl
+                                type: object
                               proxyURL:
                                 description: Optional proxy URL.
                                 type: string
@@ -2630,8 +3807,8 @@ spec:
                                 description: TLS configuration for the client.
                                 properties:
                                   ca:
-                                    description: Struct containing the CA cert to
-                                      use for the targets.
+                                    description: Certificate authority used when verifying
+                                      server certificates.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -2653,6 +3830,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -2675,10 +3853,11 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   cert:
-                                    description: Struct containing the client cert
-                                      file for the targets.
+                                    description: Client certificate to present when
+                                      doing client-authentication.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -2700,6 +3879,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -2722,6 +3902,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   insecureSkipVerify:
                                     description: Disable target certificate validation.
@@ -2747,6 +3928,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   serverName:
                                     description: Used to verify the hostname for the
                                       targets.
@@ -2859,6 +4041,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   type:
                                     description: Set the authentication type. Defaults
                                       to Bearer, Basic will cause an error
@@ -2890,6 +4073,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   username:
                                     description: The secret in the service monitor
                                       namespace that contains the username for authentication.
@@ -2911,6 +4095,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                 type: object
                               bearerTokenSecret:
                                 description: The secret's key that contains the bearer
@@ -2936,6 +4121,106 @@ spec:
                                 required:
                                 - key
                                 type: object
+                              followRedirects:
+                                description: FollowRedirects specifies whether the
+                                  client should follow HTTP 3xx redirects.
+                                type: boolean
+                              oauth2:
+                                description: OAuth2 client credentials used to fetch
+                                  a token for the targets.
+                                properties:
+                                  clientId:
+                                    description: The secret or configmap containing
+                                      the OAuth2 client id
+                                    properties:
+                                      configMap:
+                                        description: ConfigMap containing data to
+                                          use for the targets.
+                                        properties:
+                                          key:
+                                            description: The key to select.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the ConfigMap
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                      secret:
+                                        description: Secret containing data to use
+                                          for the targets.
+                                        properties:
+                                          key:
+                                            description: The key of the secret to
+                                              select from.  Must be a valid secret
+                                              key.
+                                            type: string
+                                          name:
+                                            description: 'Name of the referent. More
+                                              info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                              TODO: Add other useful fields. apiVersion,
+                                              kind, uid?'
+                                            type: string
+                                          optional:
+                                            description: Specify whether the Secret
+                                              or its key must be defined
+                                            type: boolean
+                                        required:
+                                        - key
+                                        type: object
+                                        x-kubernetes-map-type: atomic
+                                    type: object
+                                  clientSecret:
+                                    description: The secret containing the OAuth2
+                                      client secret
+                                    properties:
+                                      key:
+                                        description: The key of the secret to select
+                                          from.  Must be a valid secret key.
+                                        type: string
+                                      name:
+                                        description: 'Name of the referent. More info:
+                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                          TODO: Add other useful fields. apiVersion,
+                                          kind, uid?'
+                                        type: string
+                                      optional:
+                                        description: Specify whether the Secret or
+                                          its key must be defined
+                                        type: boolean
+                                    required:
+                                    - key
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  endpointParams:
+                                    additionalProperties:
+                                      type: string
+                                    description: Parameters to append to the token
+                                      URL
+                                    type: object
+                                  scopes:
+                                    description: OAuth2 scopes used for the token
+                                      request
+                                    items:
+                                      type: string
+                                    type: array
+                                  tokenUrl:
+                                    description: The URL to fetch the token from
+                                    minLength: 1
+                                    type: string
+                                required:
+                                - clientId
+                                - clientSecret
+                                - tokenUrl
+                                type: object
                               proxyURL:
                                 description: Optional proxy URL.
                                 type: string
@@ -2943,8 +4228,8 @@ spec:
                                 description: TLS configuration for the client.
                                 properties:
                                   ca:
-                                    description: Struct containing the CA cert to
-                                      use for the targets.
+                                    description: Certificate authority used when verifying
+                                      server certificates.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -2966,6 +4251,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -2988,10 +4274,11 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   cert:
-                                    description: Struct containing the client cert
-                                      file for the targets.
+                                    description: Client certificate to present when
+                                      doing client-authentication.
                                     properties:
                                       configMap:
                                         description: ConfigMap containing data to
@@ -3013,6 +4300,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                       secret:
                                         description: Secret containing data to use
                                           for the targets.
@@ -3035,6 +4323,7 @@ spec:
                                         required:
                                         - key
                                         type: object
+                                        x-kubernetes-map-type: atomic
                                     type: object
                                   insecureSkipVerify:
                                     description: Disable target certificate validation.
@@ -3060,6 +4349,7 @@ spec:
                                     required:
                                     - key
                                     type: object
+                                    x-kubernetes-map-type: atomic
                                   serverName:
                                     description: Used to verify the hostname for the
                                       targets.
@@ -3089,7 +4379,7 @@ spec:
                 type: array
               route:
                 description: The Alertmanager route definition for alerts matching
-                  the resource’s namespace. If present, it will be added to the generated
+                  the resource's namespace. If present, it will be added to the generated
                   Alertmanager configuration as a first-level route.
                 properties:
                   continue:
@@ -3115,7 +4405,7 @@ spec:
                       Example: "30s"'
                     type: string
                   matchers:
-                    description: 'List of matchers that the alert’s labels should
+                    description: 'List of matchers that the alert''s labels should
                       match. For the first level route, the operator removes any existing
                       equality and regexp matcher on the `namespace` label and adds
                       a `namespace: <object namespace>` matcher.'
@@ -3182,9 +4472,3 @@ spec:
         type: object
     served: true
     storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

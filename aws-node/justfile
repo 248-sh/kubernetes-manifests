@@ -1,3 +1,3 @@
 sync:
   #!/usr/bin/env bash
-  just ../clone "/config/master" v1.10.2 https://github.com/aws/amazon-vpc-cni-k8s.git aws-node/base/upstream/aws/amazon-vpc-cni-k8s
+  just ../clone "/config/master" v1.12.0 https://github.com/aws/amazon-vpc-cni-k8s.git aws-node/base/upstream/aws/amazon-vpc-cni-k8s

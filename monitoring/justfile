@@ -1,10 +1,10 @@
 sync:
   #!/usr/bin/env bash
-  just ../clone "/example/prometheus-operator-crd" v0.54.0 https://github.com/prometheus-operator/prometheus-operator.git monitoring/crds/upstream/prometheus-operator/prometheus-operator
+  just ../clone "/example/prometheus-operator-crd" v0.61.1 https://github.com/prometheus-operator/prometheus-operator.git monitoring/crds/upstream/prometheus-operator/prometheus-operator
   helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
   helm repo add grafana https://grafana.github.io/helm-charts
   helm repo update
-  helm template monitoring prometheus-community/kube-prometheus-stack --namespace monitoring --version 32.2.1 --skip-crds --skip-tests -f - <<EOF > base/helm-kube-prometheus-stack.yaml
+  helm template monitoring prometheus-community/kube-prometheus-stack --namespace monitoring --version 42.3.0 --skip-crds --skip-tests -f - <<EOF > base/helm-kube-prometheus-stack.yaml
   coreDns:
     enabled: false
   kubeControllerManager:
@@ -64,7 +64,7 @@ sync:
       podMonitorSelectorNilUsesHelmValues: false
       serviceMonitorSelectorNilUsesHelmValues: false
   EOF
-  helm template monitoring grafana/loki --namespace monitoring --version 2.9.1 --skip-crds --skip-tests -f - <<EOF > base/helm-loki.yaml
+  helm template monitoring grafana/loki --namespace monitoring --version 3.6.1 --skip-crds --skip-tests -f - <<EOF > base/helm-loki.yaml
   nodeSelector:
     env: monitoring
   persistence:
@@ -82,7 +82,7 @@ sync:
         store: inmemory
     enable_api: true
   EOF
-  helm template monitoring grafana/promtail --namespace monitoring --version 3.11.0 --skip-crds --skip-tests -f - <<EOF > base/helm-promtail.yaml
+  helm template monitoring grafana/promtail --namespace monitoring --version 6.7.4 --skip-crds --skip-tests -f - <<EOF > base/helm-promtail.yaml
   config:
     lokiAddress: http://monitoring-loki.monitoring:3100/loki/api/v1/push
     # too expensive..
