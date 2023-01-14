@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://github.com/248-sh/kubernetes-manifests/compare/v1.5.1...v1.6.0) (2023-01-14)
+
+
+### Features
+
+* **descheduler:** use stable api version. add low profile ([00f892e](https://github.com/248-sh/kubernetes-manifests/commit/00f892e86712bf8fbdc0062f1cb5c6250e578f86))
+
 ### [1.5.1](https://github.com/248-sh/kubernetes-manifests/compare/v1.5.0...v1.5.1) (2022-12-12)
 
 ## [1.5.0](https://github.com/248-sh/kubernetes-manifests/compare/v1.4.0...v1.5.0) (2022-10-30)
