@@ -1,0 +1,7 @@
+apiVersion: descheduler/v1alpha1
+kind: DeschedulerPolicy
+strategies:
+  LowNodeUtilization:
+     enabled: true
+  HighNodeUtilization:
+     enabled: false

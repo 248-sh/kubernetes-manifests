@@ -7,5 +7,5 @@ profiles:
             resources:
               - name: cpu
                 weight: 1
-            type: MostAllocated
+            type: LeastAllocated
         name: NodeResourcesFit
