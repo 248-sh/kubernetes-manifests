@@ -1,3 +1,0 @@
-sync:
-  #!/usr/bin/env bash
-  just ../clone "/manifests" v2.7.5 https://github.com/argoproj/argo-cd.git argocd/base/upstream/argoproj/argo-cd

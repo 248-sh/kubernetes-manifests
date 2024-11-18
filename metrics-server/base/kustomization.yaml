@@ -2,7 +2,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: kube-system
 resources:
-  - github.com/kubernetes-sigs/metrics-server/manifests/release?ref=v0.6.2
-patchesStrategicMerge:
-  - patch-deployment-node-selectors.yaml
-  - patch-deployment-resources.yaml
+  - github.com/kubernetes-sigs/metrics-server/manifests/release?ref=v0.7.2
+patches:
+  - path: patch-deployment-node-selectors.yaml
+  - path: patch-deployment-resources.yaml

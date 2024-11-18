@@ -23,7 +23,7 @@ spec:
                 topologyKey: kubernetes.io/hostname
       containers:
         - name: hasura
-          image: hasuraci/graphql-engine-pro:v2.11.3-pro.1
+          image: hasura/graphql-engine:v2.44.0
           imagePullPolicy: IfNotPresent
           envFrom:
             - secretRef:
