@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.6](https://github.com/248-sh/kubernetes-manifests/compare/v1.6.5...v1.6.6) (2024-11-19)
+
+
+### Bug Fixes
+
+* fix metrics-server ([66a6320](https://github.com/248-sh/kubernetes-manifests/commit/66a63204e6eca5ca6e4c42a39db00b6fc029ce4f))
+
 ### [1.6.5](https://github.com/248-sh/kubernetes-manifests/compare/v1.6.4...v1.6.5) (2024-11-19)
 
 ### [1.6.3](https://github.com/248-sh/kubernetes-manifests/compare/v1.6.2...v1.6.3) (2023-06-20)
