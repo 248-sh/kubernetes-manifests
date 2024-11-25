@@ -36,14 +36,14 @@ spec:
             httpGet:
               path: /healthz
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: /healthz
               port: 8080
-            initialDelaySeconds: 60
+            initialDelaySeconds: 10
             periodSeconds: 10
             timeoutSeconds: 5
           resources:
@@ -51,5 +51,5 @@ spec:
             #   cpu: 200m
             #   memory: 1Gi
             requests:
-              cpu: 200m
-              memory: 1Gi
+              cpu: 100m
+              memory: 500Mi
