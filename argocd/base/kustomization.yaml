@@ -8,10 +8,30 @@ patches:
 helmCharts:
   - name: argo-cd
     repo: https://argoproj.github.io/argo-helm
-    version: 7.7.3
+    version: 7.7.16
     releaseName: argocd
     namespace: argocd
     includeCRDs: true
     valuesInline:
+      applicationSet:
+        metrics:
+          enabled: true
+      controller:
+        metrics:
+          enabled: true
       dex:
         enabled: false
+        metrics:
+          enabled: true
+      notifications:
+        metrics:
+          enabled: true
+      redis:
+        metrics:
+          enabled: true
+      repoServer:
+        metrics:
+          enabled: true
+      server:
+        metrics:
+          enabled: true

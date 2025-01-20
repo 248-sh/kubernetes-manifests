@@ -5,3 +5,4 @@ metadata:
   namespace: argocd
 data:
   application.instanceLabelKey: "argocd.argoproj.io/instance"
+  kustomize.buildOptions: --enable-helm
